@@ -32,20 +32,13 @@ public class ProcessExpression {
                     return convertedA / convertedB;
                 }
             }
-        } else System.err.println("INVALID EXPRESSION");
-        return 0;
+        } throw new InvalidExpressionException("Invalid expression: " + EXPRESSION);
     }
 
     private boolean expressionIsValid() {
         boolean lengthValid = EXPRESSION.length() > 2;
-        boolean containOperation = false;
-        for (char ch : EXPRESSION.toCharArray()) {
-            if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-                containOperation = true;
-                break;
-            }
-        }
-        return lengthValid && containOperation;
+        String regex = "^\\s*[IVXLCDM]+\\s*[+\\-*/]\\s*[IVXLCDM]+\\s*$";
+        return lengthValid && EXPRESSION.matches(regex);
     }
 
     private void checkOperation() {
@@ -72,12 +65,27 @@ public class ProcessExpression {
             }
         }
     }
+    public enum Operation {
+        ADDITION("+"),
+        SUBTRACTION("-"),
+        MULTIPLICATION("*"),
+        DIVISION("/");
+
+        private final String symbol;
+
+        Operation(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+    }
 
     public void separate() {
-//        int lastIndex = 0;
-//        partA.append(expr.charAt(lastIndex));
-        PART_A.append(EXPRESSION, 0, opIndex);
-        PART_B.append(EXPRESSION, opIndex + 1, EXPRESSION.length());
+        String[] parts = EXPRESSION.trim().split("\\s*[+\\-*/]\\s*");
+        PART_A.append(parts[0]);
+        PART_B.append(parts[1]);
     }
 
     private void setOperation(Character operation) {

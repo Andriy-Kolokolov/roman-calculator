@@ -1,13 +1,12 @@
 package org.calculator;
 
-import java.util.Arrays;
-
 public class ProcessExpression {
 
-    private Character operation = null;
+    private final Character operation = checkOperation();
     private final StringBuilder partA = new StringBuilder();
     private final StringBuilder partB = new StringBuilder();
     private final String EXPRESSION;
+
     public enum Operation {
         ADDITION('+'),
         SUBTRACTION('-'),
@@ -31,7 +30,6 @@ public class ProcessExpression {
 
     public int getResult() {
         if (expressionIsValid()) {
-            checkOperation();
             separate();
             int convertedA = Converter.romanToInteger(partA.toString());
             int convertedB = Converter.romanToInteger(partB.toString());
@@ -59,35 +57,28 @@ public class ProcessExpression {
         return lengthValid && EXPRESSION.matches(regex);
     }
 
-    private void checkOperation() {
+    private Character checkOperation() {
         for (char ch : EXPRESSION.toCharArray()) {
             if (ch == Operation.ADDITION.getChar()) {
-                setOperation(ch);
-                break;
+                return ch;
             }
             if (ch == Operation.SUBTRACTION.getChar()) {
-                setOperation(ch);
-                break;
+                return ch;
             }
             if (ch == Operation.MULTIPLICATION.getChar()) {
-                setOperation(ch);
-                break;
+                return ch;
             }
             if (ch == Operation.DIVISION.getChar()) {
-                setOperation(ch);
-                break;
+                return ch;
             }
         }
+        throw new InvalidExpressionException("Operation not found in expression: " + EXPRESSION);
     }
 
     public void separate() {
         String[] parts = EXPRESSION.trim().split("\\s*[+\\-*/]\\s*");
         partA.append(parts[0]);
         partB.append(parts[1]);
-    }
-
-    private void setOperation(Character operation) {
-        this.operation = operation;
     }
 
     public String getExpr() {

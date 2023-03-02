@@ -2,7 +2,6 @@ package org.calculator;
 
 public class ProcessExpression {
 
-    private int opIndex;
     private Character operation = null;
     private final StringBuilder PART_A = new StringBuilder();
     private final StringBuilder PART_B = new StringBuilder();
@@ -32,7 +31,8 @@ public class ProcessExpression {
                     return convertedA / convertedB;
                 }
             }
-        } throw new InvalidExpressionException("Invalid expression: " + EXPRESSION);
+        }
+        throw new InvalidExpressionException("Invalid expression: " + EXPRESSION);
     }
 
     private boolean expressionIsValid() {
@@ -43,42 +43,39 @@ public class ProcessExpression {
 
     private void checkOperation() {
         for (char ch : EXPRESSION.toCharArray()) {
-            if (ch == '+') {
-                setOperation('+');
-                opIndex = EXPRESSION.indexOf(ch);
+            if (ch == Operation.ADDITION.getChar()) {
+                setOperation(ch);
                 break;
             }
-            if (ch == '-') {
-                setOperation('-');
-                opIndex = EXPRESSION.indexOf(ch);
+            if (ch == Operation.SUBTRACTION.getChar()) {
+                setOperation(ch);
                 break;
             }
-            if (ch == '*') {
-                setOperation('*');
-                opIndex = EXPRESSION.indexOf(ch);
+            if (ch == Operation.MULTIPLICATION.getChar()) {
+                setOperation(ch);
                 break;
             }
-            if (ch == '/') {
-                setOperation('/');
-                opIndex = EXPRESSION.indexOf(ch);
+            if (ch == Operation.DIVISION.getChar()) {
+                setOperation(ch);
                 break;
             }
         }
     }
+
     public enum Operation {
-        ADDITION("+"),
-        SUBTRACTION("-"),
-        MULTIPLICATION("*"),
-        DIVISION("/");
+        ADDITION('+'),
+        SUBTRACTION('-'),
+        MULTIPLICATION('*'),
+        DIVISION('/');
 
-        private final String symbol;
+        private final char opSymbol;
 
-        Operation(String symbol) {
-            this.symbol = symbol;
+        Operation(char ch) {
+            this.opSymbol = ch;
         }
 
-        public String getSymbol() {
-            return symbol;
+        public char getChar() {
+            return opSymbol;
         }
     }
 
